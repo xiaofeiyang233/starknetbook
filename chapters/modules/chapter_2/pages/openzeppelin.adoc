@@ -1,17 +1,8 @@
-[id="wallets"]
+[id="openzeppelin"]
 
-= Wallets
+= Open Zeppelin
 
-Once you have deployed your first account on Starknet - you are going to need a wallet UI to manage it. Here are some common choices which work well across browsers -
-
-.StarkNet wallets
-|===
-|Name|Extension
-
-|https://www.argent.xyz/argent-x/[Argent X]|https://chrome.google.com/webstore/detail/argent-x/dlcobpjiigpikoobohmabehhmhfoodbb[Browser Extension]
-
-|https://braavos.app/[Braavos]|https://chrome.google.com/webstore/detail/braavos-smart-wallet/jnlgamecbpmbajjfhmmmlhejkemejdma[Browser Extension]
-|===
+== Contributing
 
 == Contributing
 
