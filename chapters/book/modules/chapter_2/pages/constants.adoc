@@ -1,14 +1,14 @@
 [id="constants"]
 
-= Constants in Cairo Contracts
+= Cairo 合约中的常量
 
-In this chapter, we will discuss the use of constants in Cairo contracts. Constants are useful for defining values that do not change throughout the execution of a contract. We will continue using the modified Vote contract.
+在本章中，我们将讨论在 Cairo 合约中使用常量。常量对于定义在合约执行过程中不会改变的值非常有用。我们将继续使用修改后的 Vote 合约。
 
-== Defining Constants
+== 定义常量
 
-To define a constant in a Cairo contract, you use the `const` keyword followed by the name of the constant, its type, and its value. Constants can be of any Cairo supported data type, such as `u8`, `u16`, `u256`, etc.
+要在 Cairo 合约中定义常量，您需要使用 const 关键字，后面跟着常量的名称、类型和值。常量可以是任何 Cairo 支持的数据类型，如 u8、u16 、u256 等。
 
-In the Vote contract, we define two constants to represent the voting options. This helps us improve the readability of the contract code by providing meaningful names for the values 0 and 1:
+在 Vote 合约中，我们定义两个常量来表示投票选项。这有助于我们通过为值 0 和 1 提供有意义的名称来提高合约代码的可读性：
 
 [source,cairo]
 ----
@@ -16,41 +16,41 @@ const YES: u8 = 1_u8;
 const NO: u8 = 0_u8;
 ----
 
-Here, we define two constants `YES` and `NO` with values 1 and 0, respectively, both of type `u8`.
+这里，我们定义了两个类型为 `u8` 的常量 `YES` 和 `NO`，它们的值分别为 1 和 0。
 
-== Using Constants
+== 使用常量
 
-Constants can be used in the same way as any other variables in the contract. The main difference is that their values cannot be changed during the contract's execution.
+常量可以像合约中的任何其他变量一样使用。主要区别在于它们的值在合约执行过程中不能更改。
 
-In our Vote contract, the constants `YES` and `NO` are used in the `vote` function to validate the submitted vote and update the vote count accordingly. The `vote` function is called by the voters to submit their votes. The function checks if the submitted vote is valid (either `YES` or `NO`) and updates the vote count accordingly:
+在我们的 Vote 合约中，常量 `YES` 和 `NO` 用于 vote 函数以验证提交的投票并相应地更新票数。投票者调用 `vote` 函数来提交他们的投票。该函数检查提交的投票是否有效（要么是 `YES`，要么是 `NO`），并相应地更新投票数：
 
 [source,cairo]
 ----
 #[external]
 fn vote(vote: u8) {
-    // Check if the vote is valid (0 or 1)
+    // 检查投票是否有效（0 或 1）
     assert(vote == NO | vote == YES, 'VOTE_0_OR_1');
 
-    // ... (rest of the function)
+    // ... (函数的其余部分)
 }
 ----
 
-By using constants, we improve the readability and maintainability of the contract code. If we need to change the values of the vote options, we only need to modify the constants' definitions.
+通过使用常量，我们提高了合约代码的可读性和可维护性。如果我们需要更改投票选项的值，我们只需要修改常量的定义。
 
-== Advantages of Using Constants
+== 使用常量的优点
 
-There are several advantages of using constants in your Cairo contracts:
+在你的 Cairo 合约中使用常量有几个优点
 
-1. Readability: Constants make the code more readable by providing meaningful names for values.
-2. Maintainability: By defining values in one place, you can easily change them without having to search and replace the values throughout the code.
-3. Performance: Constants can improve performance, as they are known at compile-time and do not consume storage or memory at runtime.
+1. 可读性：常量通过为值提供有意义的名称使代码更易读。
+2. 可维护性：通过在一个地方定义值，你可以轻松地更改它们，而无需在整个代码中搜索和替换值。
+3. 性能：常量可以提高性能，因为它们在编译时已知，且在运行时不占用存储或内存。
 
 [NOTE]
 ====
-The Book is a community-driven effort created for the community.
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
 
-* If you've learned something, or not, please take a moment to provide feedback through https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[this 3-question survey].
-* If you discover any errors or have additional suggestions, don't hesitate to open an https://github.com/starknet-edu/starknetbook/issues[issue on our GitHub repository].
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
 ====
 
 == Contributing

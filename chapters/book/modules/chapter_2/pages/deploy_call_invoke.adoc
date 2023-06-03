@@ -1,39 +1,38 @@
 [id="calling_invoking"]
 
-= Deploying, Calling and Invoking Contracts
+= 部署, Calling and Invoking 合约
 
+在本章中，我们将探讨如何使用 _calling_ 和 _invoking_ 与已部署的 Starknet 合约进行交互。我们将使用投票合约作为示例。
 
-In this chapter, we'll explore how to interact with deployed Starknet contracts using _calling_ and _invoking_. We'll use the voting contract as an example.
+* Calling contracts: 与标记为 `#[view]` 入口点的合约函数进行交互。这些函数不会改变网络状态，因此不需要费用或签名。这类似于以太坊 API 中的 call 调用。
+* Invoking contracts: 与标记为 #[external] 入口点的合约函数进行交互。这些函数会改变网络状态并需要费用和签名。这类似于以太坊 API 中的 deploy 。
 
-* Calling contracts: Interacting with contract functions marked with the `#[view]` entry point. These functions do not alter the state of the network, so they don't require fees or signing. This is similar to a `call` in the Ethereum API.
-* Invoking contracts: Interacting with contract functions marked with the `#[external]` entry point. These functions do alter the state of the network and require fees and signing. This is similar to a `deploy` in the Ethereum API.
+== 为选民部署账户合约
 
-== Deploying Account Contracts for Voters
+在与投票合约交互之前，我们需要确保选民账户作为账户合约部署在 Starknet 上。每个选民账户必须注册并获得资金以参与投票过程。这个过程是必要的，因为我们使用了账户抽象（稍后在本书中会介绍更多内容）。
 
-Before interacting with the voting contract, we need to ensure that voter accounts are deployed as account contracts on Starknet. Each voter account must be registered and funded to participate in the voting process. This process is required since we are using Account Abstraction (more in this later in the book).
+要为选民部署账户合约，请按照以下步骤操作：
 
-To deploy an account contract for a voter, follow these steps:
-
-1) Create a new account with a name, for example, "voter_1":
+1) 创建一个带有名称的新账户，例如 "voter_1"：
 [source,bash]
 ----
 starknet new_account --account voter_1
 ----
 
-2) Fund the newly created account (this can be done using a https://faucet.goerli.starknet.io/[faucet] or transferring funds from another account). Wait for the transaction to be confirmed in L2. You can check the status of the transaction by copying the transaction hash into a block explorer such as https://testnet.starkscan.co/[Starkscan] or https://goerli.voyager.online/[Voyager]; the transaction should be confirmed in a few minutes.
 
-3) Deploy the account contract:
+2) 为新创建的账户充值（这可以通过 https://faucet.goerli.starknet.io/[faucet] 或从其他账户转账来完成）。等待 L2 中的交易被确认。您可以通过将交易哈希复制到 https://testnet.starkscan.co/[Starkscan] 或 https://goerli.voyager.online/[Voyager] 等区块链浏览器中来检查交易状态；交易应在几分钟内得到确认。
+
+3) 部署账户合约：
 [source,bash]
 ----
 starknet deploy_account --account voter_1
 ----
 
-Repeat these steps for each voter account you want to register in the voting contract.
+对于您想要在投票合约中注册的每个选民账户，请重复这些步骤。
 
-Once we have deployed account contracts for all the voters, we can proceed with deploying and interacting with the voting contract.
+部署完所有选民的账户合约后，我们可以继续部署并与投票合约进行交互。
 
-
-== Deploying the Voting Contract
+== 部署投票合约
 
 Here's the command to deploy the voting contract, which will register voter_1, voter_2, and voter_3 as eligible voters. Note these are arguments that the constructor takes.
 
@@ -41,41 +40,43 @@ Here's the command to deploy the voting contract, which will register voter_1, v
 ----
 starknet deploy --class_hash <class-hash-of-voting-contract> --inputs <voter_1> <voter_2> <voter_3> --account <deployer-account> --max_fee 100000000000000000
 ----
-
-The contract that we would be interacting has been deployed at address: *0x06ce0bdf1985308cbb800364385ac66cbae203688e3e28f3b1c234da62a754bf*. You can find it https://testnet.starkscan.co/contract/0x06ce0bdf1985308cbb800364385ac66cbae203688e3e28f3b1c234da62a754bf[here] on Starkscan.
+我们将与之交互的合约已部署在地址：*0x06ce0bdf1985308cbb800364385ac66cbae203688e3e28f3b1c234da62a754bf*。您可以在 Starkscan 上找到 https://testnet.starkscan.co/contract/0x06ce0bdf1985308cbb800364385ac66cbae203688e3e28f3b1c234da62a754bf[它]。
 
 
 == Verifying Voter Eligibility
 
-Let's confirm that the registered voters are eligible to vote. We can use the `voter_can_vote` and `is_voter_registered` functions to do this. Since both functions are view functions, we can utilize the `starknet call` syntax to interact with them.
+让我们确认注册选民有资格投票。我们可以使用 `voter_can_vote` 和 `is_voter_registered` 函数来实现这一点。由于这两个函数都是视图函数，我们可以使用 starknet call 语法与它们进行交互。
 
-To check if a registered voter can vote, use the following command:
+
+要检查一个注册选民是否可以投票，请使用以下命令：
 
 [source,bash]
 ----
 starknet call --function voter_can_vote --inputs 0x072c49c0f3a76640855c6d56104b034f2a61b95da5eb1c1a6afb8f7277856220 --address 0x06ce0bdf1985308cbb800364385ac66cbae203688e3e28f3b1c234da62a754bf --account vote_admin
 ----
 
-Since we provided a registered voter address as an input, the result is 1 (boolean true), indicating the voter is eligible to vote.
 
-Next, let's call the `is_voter_registered` function using an unregistered account address to observe the output:
+由于我们提供了一个注册选民地址作为输入，结果为 1（布尔真），表示选民有资格投票。
+
+接下来，让我们使用未注册的账户地址调用 is_voter_registered 函数以观察输出：
 
 [source, bash]
 ----
 starknet call --function is_voter_registered --inputs 0x0265a5a55cd3b03c2a3519f9b7a796a2c770fc9f85538df1e27f268f2885a616 --address 0x06ce0bdf1985308cbb800364385ac66cbae203688e3e28f3b1c234da62a754bf --account vote_admin
 ----
 
-With an unregistered account address, the terminal output is 0 (i.e., false), confirming that the account is not eligible to vote.
+由于我们提供了一个未注册选民地址作为输入，结果为 0（布尔假），表示该选民未注册。
 
 ====
-FUN ASSIGNMENT: Before proceeding to vote, ensure that all three voter accounts are registered and eligible to vote!
+提示: 在投票前,确保三个选民账户都已注册并有资格投票!
 ====
 
-== Voting
+== 投票
 
-With voter eligibility confirmed, we can now proceed to cast votes using the `vote` function. This function is marked as external, so we'll use the `starknet invoke` command to interact with it. This process is comparable to using `send` in the Ethereum API when interacting with a contract function that modifies the contract state.
+在确认选民资格后，我们现在可以使用 `vote` 函数进行投票。此函数被标记为 external，因此我们将使用 `starknet invoke` 命令与之交互。这个过程类似于在与修改合约状态的合约函数交互时使用以太坊 API 中的 `send`。
 
-The syntax for `invoke` is similar to `call`, but in this case, we'll provide the input as either 1 (Yes) or 0 (No) to represent our vote.
+`invoke` 的语法类似于 `call`，但在这种情况下，我们将输入提供为 1（赞成）或 0（反对）以表示我们的投票。
+
 
 [source,bash]
 ----
@@ -86,11 +87,11 @@ starknet invoke --function vote --address 0x06ce0bdf1985308cbb800364385ac66cbae2
 starknet invoke --function vote --address 0x06ce0bdf1985308cbb800364385ac66cbae203688e3e28f3b1c234da62a754bf --inputs 0 --account voter_3
 ----
 
-Don't forget to cast a vote with the voter_1 account before moving on to the next step.
+在进行下一步之前，不要忘记用 voter_1 账户进行投票。
 
-== Viewing Vote Results
+== 查看投票结果
 
-To view the results, we can call the `get_vote_results` function, which is a view function. We'll use the `starknet call` command.
+要查看结果，我们可以调用 `get_vote_results` 函数，这是一个 view 函数。我们将使用 `starknet call` 命令。
 
 [source,bash]
 ----
@@ -103,16 +104,16 @@ starknet call --function get_vote_results --address 0x06ce0bdf1985308cbb80036438
 2 1 66 33
 ----
 
-The output will display the number of "Yes" votes, the number of "No" votes, and their respective percentages.
+输出将显示 "赞成" 的票数、"反对" 的票数以及各自的百分比。
 
-Congratulations! You've successfully deployed and interacted with a voting smart contract on Starknet!
+恭喜！您已成功在 Starknet 上部署并与投票智能合约互动！
 
 [NOTE]
 ====
-The Book is a community-driven effort created for the community.
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
 
-* If you've learned something, or not, please take a moment to provide feedback through https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[this 3-question survey].
-* If you discover any errors or have additional suggestions, don't hesitate to open an https://github.com/starknet-edu/starknetbook/issues[issue on our GitHub repository].
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
 ====
 
 == Contributing
