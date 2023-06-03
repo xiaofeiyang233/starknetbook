@@ -1,12 +1,13 @@
 [id="strings"]
 
-= Strings in Cairo
+= 在 Cairo 中的字符串
 
-Cairo currently has limited support for strings, which makes it challenging to work with long strings. However, you can use short strings in your Cairo contracts, as we did in the https://github.com/starknet-edu/starknetbook/blob/main/chapters/modules/chapter_2/pages/contracts/src/pokemon_array.cairo[Pokémon example]. These short strings are ultimately converted into `felt252`.
+Cairo 目前对字符串的支持有限，这使得处理长字符串变得具有挑战性。然而，您可以在您的 Cairo 合约中使用短字符串，就像我们在 https://github.com/starknet-edu/starknetbook/blob/main/chapters/modules/chapter_2/pages/contracts/src/pokemon_array.cairo[Pokémon 示例] 中所做的那样。这些短字符串最终会被转换为 felt252。
 
-== Working with Short Strings
 
-As we mentioned, Cairo can handle only short strings, like 'Wrong pokemon' in our Pokémon contract. Keep in mind that, unlike other programming languages, Cairo doesn't have built-in support for string manipulation or complex string operations.
+== 处理短字符串
+
+正如我们提到的，Cairo 只能处理短字符串，比如我们的 Pokémon 合约中的 "Wrong pokemon"。请记住，与其他编程语言不同，Cairo 没有内置支持字符串操作或复杂字符串操作。
 
 [source, rust]
 ----
@@ -18,39 +19,40 @@ fn index_pokemon_array() {
 }
 ----
 
-In this example:
+在这个例子中:
 
-* The short strings 'Pikachu', 'Charmander', and 'Wrong pokemon' are used in the code.
+* 在代码中使用了短字符串 'Pikachu'、'Charmander' 和 'Wrong pokemon'。
 
-This is how the short strings are converted into `felt252`:
-* 'Pikachu' is converted into: 22633908053174389.
-* 'Charmander' is converted into: 318324037530966278038898.
-* 'Wrong pokemon' is converted into: 6928266141989273178278057570158.
+这是短字符串如何转换为 felt252 的方式：
+* 'Pikachu' 被转换成：22633908053174389。
+* 'Charmander' 被转换成：318324037530966278038898。
+* 'Wrong pokemon' 被转换成：6928266141989273178278057570158。
 
-Currently, when coding with Cairo we need to constantly be converting between felt252s and strings. You can use the https://www.stark-utils.xyz/converter[Stark Utils] converter for this.
+目前，在使用 Cairo 编程时，我们需要不断地在 felt252 和字符串之间进行转换。您可以使用 https://www.stark-utils.xyz/converter[Stark Utils] 转换器来完成此操作
 
 image::starkutils.png[starkutils]
 
-This is a tedious process, which the Cairo community is improving in the near the future.
+这是一个繁琐的过程，Cairo 社区将在不久的将来对其进行改进。
 
-== Conclusion and Summary
+== 结论和总结
 
-In this chapter, we explored strings in Cairo and learned about their limitations. As a quick recap:
+在这一章中，我们探讨了 Cairo 中的字符串，并了解了它们的局限性。简要回顾一下：
 
-* *Short strings*: Cairo can handle only short strings, which can be used directly in your contracts.
-* *Conversion to felt252*: When working with short strings in Cairo, they are converted into `felt252`.
-* *Limited string manipulation*: Cairo doesn't offer built-in support for complex string manipulation or operations.
-* *Convert between felt252 and short strings*: You can use the https://www.stark-utils.xyz/converter[Stark Utils] converter to convert between felt252s and strings.
+* *短字符串*: Cairo 只能处理短字符串，可以直接在您的合约中使用。
+* *转换为 felt252*: 在 Cairo 中处理短字符串时，它们会被转换为 `felt252`。
+* *有限的字符串操作*: Cairo 不提供复杂字符串操作或操作的内置支持。
+* *在 felt252 和短字符串之间转换*: 您可以使用 https://www.stark-utils.xyz/converter[Stark Utils] 转换器在 felt252 和字符串之间进行转换。
 
-Despite its limitations, Cairo provides basic string handling capabilities, which can be sufficient for simple use cases in your contracts.
+尽管有其局限性，Cairo 提供了基本的字符串处理功能，这对于您的合约中简单的用例可能已经足够。
 
 [NOTE]
 ====
-The Book is a community-driven effort created for the community.
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
 
-* If you've learned something, or not, please take a moment to provide feedback through https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[this 3-question survey].
-* If you discover any errors or have additional suggestions, don't hesitate to open an https://github.com/starknet-edu/starknetbook/issues[issue on our GitHub repository].
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
 ====
+
 
 == Contributing
 

@@ -5,11 +5,10 @@
 在本章中，我们将重点讨论 Starknet 合约中的事件，以扩展版的投票合约为例。`event` 是记录和通知合约内特定事件的有用工具。它们发出可以被客户端访问的数据。
 带有事件的投票合约
 
-在这个示例中，我们将使用以下扩展版本的投票合约。合约的新增内容包括特征、实现和事件。该合约允许三个已注册的投票者就某个提案提交投票（1 表示赞成/0 表示反对）。它记录赞成票和反对票的数量，并提供视图（getter）函数来检查投票状态和投票者资格。
 
 == Voting Contract with Events
 
-In this example, we will use the following extended version of the voting contract. The additions to the contract include traits, implementations, and events. The contract allows three registered voters to submit their votes (1 for Yes/0 for No) on a proposal. It keeps track of the number of yes votes and no votes and provides view (getter) functions to check the voting status and voter eligibility.
+在这个示例中，我们将使用以下扩展版本的投票合约。合约的新增内容包括特征、实现和事件。该合约允许三个已注册的投票者就某个提案提交投票（1 表示赞成/0 表示反对）。它记录赞成票和反对票的数量，并提供视图（getter）函数来检查投票状态和投票者资格。
 
 [source,rust]
 ----
