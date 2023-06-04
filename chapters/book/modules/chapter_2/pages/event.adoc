@@ -1,18 +1,20 @@
 [id="event"]
 
-= Events in Starknet Contracts
+= Starknet 合约中的 Event
 
-In this chapter, we will focus on events in a Starknet contract, using an extended version of the voting contract as an example. Events are a useful tool for logging and notifying external entities about specific occurrences within a contract. They emit data that can be accessed by clients.
+在本章中，我们将重点讨论 Starknet 合约中的事件，以扩展版的投票合约为例。`event` 是记录和通知合约内特定事件的有用工具。它们发出可以被客户端访问的数据。
+带有事件的投票合约
+
 
 == Voting Contract with Events
 
-In this example, we will use the following extended version of the voting contract. The additions to the contract include traits, implementations, and events. The contract allows three registered voters to submit their votes (1 for Yes/0 for No) on a proposal. It keeps track of the number of yes votes and no votes and provides view (getter) functions to check the voting status and voter eligibility.
+在这个示例中，我们将使用以下扩展版本的投票合约。合约的新增内容包括特征、实现和事件。该合约允许三个已注册的投票者就某个提案提交投票（1 表示赞成/0 表示反对）。它记录赞成票和反对票的数量，并提供视图（getter）函数来检查投票状态和投票者资格。
 
 [source,rust]
 ----
 #[contract]
 mod Vote2 {
-    // Core Library Imports
+    // 核心库导入
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use array::ArrayTrait;
@@ -22,7 +24,7 @@ mod Vote2 {
     // ------
 
     /// @title VotingResultTrait
-    /// @notice A trait for retrieving the results of the voting
+    /// @notice 用于检索投票结果的特征
     trait VotingResultTrait {
         fn get_voting_result() -> (u8, u8);
         fn get_voting_result_in_percentage() -> (u8, u8);
@@ -210,9 +212,10 @@ mod Vote2 {
 }
 ----
 
-== Defining Events
+== 定义 `event`
 
-To define an event in a Starknet contract, you can use the `#[event]` attribute followed by the event definition. In our extended voting contract, we have one event called `VoteCast`, which is emitted when a vote is cast. The event takes two parameters: the voter's address and the vote value (0 for No, 1 for Yes).
+要在 Starknet 合约中定义事件，您可以使用 `#[event]` 属性，然后是事件定义。在我们的扩展投票合约中，我们有一个名为 `VoteCast` 的事件，当投票时会发出。该事件接受两个参数：选民的地址和投票值（0 代表 No，1 代表 Yes）
+
 
 [source,rust]
 ----
@@ -220,9 +223,9 @@ To define an event in a Starknet contract, you can use the `#[event]` attribute 
 fn VoteCast(voter: ContractAddress, vote: u8) {}
 ----
 
-== Emitting Events
+== 发出 `event`
 
-To emit an event, simply call the event function with the appropriate arguments. In our voting contract, the `VoteCast` event is emitted after the vote has been processed in the `vote` function.
+要发出事件，只需用适当的参数调用事件函数。在我们的投票合约中，投票处理完毕后，VoteCast 事件会被发出。
 
 [source,rust]
 ----
@@ -230,16 +233,16 @@ To emit an event, simply call the event function with the appropriate arguments.
 VoteCast(caller, vote);
 ----
 
-Events in Starknet contracts are not directly readable from within the contract itself. Instead, events are designed to be consumed by external off-chain entities, such as clients or other services that are listening to the contract.
+Starknet 合约中的事件不能直接从合约本身读取。相反，事件旨在被外部链下实体（如监听合约的客户端或其他服务）记录。
 
-To get the value from an event, you need to set up an off-chain service or client to listen for the event emitted by the contract. This can be achieved using SDKs. For example, the Starknet SDK for Python provides a `listen_for_event` function that can be used to listen for events emitted by a contract. In following sections, we will see how to use Starknet SDKs to listen for events emitted by our voting contract.
+要从事件中获取值，您需要设置一个链下服务或客户端来监听合约发出的事件。这可以使用 SDK 实现。例如，Starknet 的 Python SDK 提供了一个 listen_for_event 函数，可用于监听合约发出的事件。在接下来的章节中，我们将看到如何使用 Starknet 的 SDK 监听我们的 voting 合约发出的 events。
 
 [NOTE]
 ====
-The Book is a community-driven effort created for the community.
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
 
-* If you've learned something, or not, please take a moment to provide feedback through https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[this 3-question survey].
-* If you discover any errors or have additional suggestions, don't hesitate to open an https://github.com/starknet-edu/starknetbook/issues[issue on our GitHub repository].
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
 ====
 
 == Contributing

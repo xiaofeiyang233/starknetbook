@@ -1,17 +1,17 @@
 [id="testing_testnet"]
 
-= Testing Using a Deployed Contract
+= 使用已部署合约进行测试
 
-Testing is a crucial aspect of smart contract development, as it ensures that your contract operates as intended and helps detect potential bugs or security vulnerabilities. The optimal approach to local testing involves using unit tests within our code and interacting with the contract through a local development network. In the next chapter of the book, we will cover both of these methods. For now, in this subchapter, we will demonstrate how to interact with the Pokemon contract and its assertions on the testnet.
+测试是智能合约开发的关键方面，因为它确保您的合约按预期操作，并有助于检测潜在的漏洞或安全漏洞。本地测试的最佳方法包括在我们的代码中使用单元测试，并通过本地开发网络与合约进行交互。在本书的下一章中，我们将介绍这两种方法。现在，在本子章中，我们将演示如何在测试网上与 Pokémon 合约及其断言进行交互。
 
-In this subchapter, we will guide you through testing a deployed contract using view functions, either with the Starknet CLI or a block explorer. The contract we will be examining is the https://github.com/starknet-edu/starknetbook/blob/main/chapters/modules/chapter_2/pages/contracts/src/pokemon_array.cairo[`PokeArray` contract], which showcases basic operations with Array and Span in Cairo. Ensure that you have completed the https://book.starknet.io/chapter_2/deploy_call_invoke.html[Deploying, Calling, and Invoking Contracts] subchapter before proceeding.
+在本子章中，我们将指导您使用查看功能测试已部署合约，可以通过 Starknet CLI 或区块浏览器进行操作。我们将要研究的合约是 https://github.com/starknet-edu/starknetbook/blob/main/chapters/modules/chapter_2/pages/contracts/src/pokemon_array.cairo[`PokeArray` 合约]，它展示了使用 Cairo 中的 Array 和 Span 进行的基本操作。请确保在继续之前已完成 https://book.starknet.io/chapter_2/deploy_call_invoke.html[部署、调用和调用合约] 子章。
 
 
-== Deploying to Goerli Testnet
+== 部署到 Goerli 测试网
 
-As we review in Chapter 1, to deploy a Cairo contract to the Goerli testnet, follow these steps once you have set up an account contract (review the "Deploying, Calling and Invoking Contracts" subchapter in Chapter 2 for more details):
+正如我们在第1章中回顾的，要将 Cairo 合约部署到 Goerli 测试网，请在设置了帐户合约后按照以下步骤操作（有关更多详细信息，请查看第2章中的“部署、调用和调用合约”子章）：
 
-* Set the `STARKNET_NETWORK` environment variable to `alpha-goerli` and the `STARKNET_WALLET` environment variable to `starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount`.
+* 将 `STARKNET_NETWORK` 环境变量设置为 `alpha-goerli`，将 `STARKNET_WALLET` 环境变量设置为 `starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount`。
 
 [source, shell]
 ----
@@ -19,64 +19,66 @@ export STARKNET_NETWORK=alpha-goerli
 export STARKNET_WALLET=starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
 ----
 
-* Use the `starknet declare` command to declare your contract. Replace `<path_to_compiled_contract_json>` with the path to your compiled contract JSON file, and `<account>` with the account you want to use for deployment. In order to get the compiled contract JSON file you need to compile the contract, e.g. using `scarb build`. In the particular case of the Pokemon contract you can go to the https://github.com/starknet-edu/starknetbook/tree/main/chapters/modules/chapter_2/pages/contracts[Book repo] and run `scarb build` inside the contracts directory of Chapter 2 to obtain the JSON in the path "target/release/starknetbook_chapter_2_PokeArray.json".
 
-Bare in mind that if you declare exactly the same Pokemon contract you will get an error stating that this contract was previously declared. This error will also return the contract class hash, save it for the deployment.
+* 使用 `starknet declare` 命令声明您的合约。用您的已编译合约 JSON 文件的路径替换` <path_to_compiled_contract_json>`，并用您要用于部署的帐户替换 `<account>`。为了获得已编译的合约 JSON 文件，您需要编译合约，例如使用 `scarb build`。对于 Pokemon 合约的特殊情况，您可以转到 https://github.com/starknet-edu/starknetbook/tree/main/chapters/modules/chapter_2/pages/contracts[书籍仓库]，并在第2章的 contracts 目录中运行 `scarb build`，以获取路径 "target/release/starknetbook_chapter_2_PokeArray.json" 中的 JSON。
+
+请注意，如果您声明了完全相同的 Pokemon 合约，您将收到一个错误，表明此合约以前已经声明过。此错误还将返回 `contract class hash` ，请将其保存以供部署使用。
 
 [source, shell]
 ----
 starknet declare --contract <path_to_compiled_contract_json> --account <account> --max_fee 100000000000000000
 ----
+此命令返回 `contract class hash` 和 `transaction hash`。
 
-This command returns the contract class hash and the transaction hash.
-
-* Deploy your contract using the `starknet deploy` command. Replace `<class_hash>` with the class hash you received in the previous step, and `<account>` with the account you want to use for deployment.
+* 使用 `starknet deploy` 命令部署您的合约。用您在上一步中收到的类哈希替换 <class_hash>，并用您要用于部署的帐户替换 <account>。
 
 [source, shell]
 ----
 starknet deploy --class_hash <class_hash> --account <account> --max_fee 100000000000000000
 ----
 
-This command returns the contract address and the transaction hash.
-
-== Using View Functions for Testing
-
-In the `PokeArray` contract, we have created view functions to test various aspects of our contract, such as `pop_pokemon_array`, `index_pokemon_array`, and `index_pokemon_span`. These view functions can be called using the Starknet CLI or a block explorer. If the view functions return a value of 1, it indicates that our assertions within the functions have passed. If the assertions fail or an error occurs, the execution will stop, and an error message will be displayed.
-
-== Testing the Deployed Contract
-
-After deploying your contract, you can use a block explorer or the `starknet` CLI to call and invoke functions to test the assertions.
-
-Follow these steps to test your deployed contract:
-
-1. *Using a block explorer*: Interact with your contract by employing a Starknet block explorer, such as https://goerli.voyager.online/[Voyager] or https://testnet.starkscan.co/[StarkScan]. Input the contract address and call the view functions through the Read tab.
-
-2. *Using Starknet CLI*: As an alternative, utilize the `starknet call` command to call the view functions. For more information on using the CLI, consult the https://book.starknet.io/chapter_2/deploy_call_invoke.html[Deploying, Calling, and Invoking Contracts] subchapter.
+这个命令返回合约地址和交易哈希。
 
 
-== Handling Errors in View Functions
+== 使用 `View Functions` 进行测试
 
-If an error occurs in your code and an assertion fails, you will encounter an error message similar to the one shown below:
+在 PokeArray 合约中，我们创建了查看功能来测试合约的各个方面，例如 `pop_pokemon_array`、`index_pokemon_array` 和 `index_pokemon_span`。这些查看功能可以使用 Starknet CLI 或区块浏览器调用。如果查看功能返回值为 1，表示我们在功能内的断言已通过。如果断言失败或发生错误，执行将停止，并显示错误消息。
+
+== 测试已部署的合约
+
+部署合约后，您可以使用区块浏览器或 `starknet CLI` 来调用和调用功能以测试断言。
+
+
+按照以下步骤测试您的已部署合约：
+
+
+1. *使用区块浏览器*: 通过使用 Starknet 区块浏览器（如 https://goerli.voyager.online/[Voyager] 或 https://testnet.starkscan.co/[StarkScan]）与您的合约进行交互。输入合约地址并通过 Read 标签调用查看功能。
+
+2. *使用 Starknet CLI*: 作为替代方案，使用 `starknet call` 命令调用查看功能。有关使用 CLI 的更多信息，请查看 https://book.starknet.io/chapter_2/deploy_call_invoke.html[部署、调用和调用合约] 子章。
+
+
+== 处理 View Functions 中的报错
+
+如果您的代码中发生错误并且断言失败，您将遇到类似于下面显示的错误消息：
 
 image::errorExplorer.png[errorExplorer]
 
-In this situation, the execution is reverted, and an error reason is provided in the felt252 format. To convert the felt252 value into a more readable string, follow these steps:
+在这种情况下，执行被还原，并以 felt252 格式提供错误原因。要将 felt252 值转换为更易读的字符串，请按照以下步骤操作：
 
-1. Visit the https://www.stark-utils.xyz/converter[Stark Utils] converter.
-2. Copy the felt252 value into the converter's input field.
-3. The converter will translate the felt252 value into a human-readable string, such as "Wrong pokemon", providing clarity on the error.
+1. 访问 https://www.stark-utils.xyz/converter[Stark Utils] 转换器。
+2. 将 felt252 值复制到转换器的输入字段中
+3. 转换器将把 felt252 值翻译成人类可读的字符串，如 "Wrong pokemon"，以便更清楚地了解错误。
 
 image::translateError.png[translateError]
 
-For more information on how Cairo handles text, refer to the https://book.starknet.io/chapter_2/strings.html[Strings] subchapter. Cairo is expected to offer support for strings in the near future, which will streamline this process.
-
+有关 Cairo 如何处理文本的更多信息，请参阅 https://book.starknet.io/chapter_2/strings.html[字符串] 子章。预计 Cairo 将在不久的将来提供对字符串的支持，从而简化此过程。
 
 [NOTE]
 ====
-The Book is a community-driven effort created for the community.
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
 
-* If you've learned something, or not, please take a moment to provide feedback through https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[this 3-question survey].
-* If you discover any errors or have additional suggestions, don't hesitate to open an https://github.com/starknet-edu/starknetbook/issues[issue on our GitHub repository].
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
 ====
 
 == Contributing

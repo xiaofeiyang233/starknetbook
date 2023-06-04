@@ -1,22 +1,30 @@
 [id="vue-stark-boil"]
-s
+
 = Vue Stark Boil
 
 ====
-CONTRIBUTE: We are looking to add a concrete example of how to use Starknet Vue. If you have a project that uses Starknet React, please submit a PR.
+贡献者：我们希望添加一个关于如何使用 Starknet Vue 的具体示例。如果您有一个使用 Starknet React 的项目，请提交 PR。
 ====
 
-The Starknet ecosystem offers frameworks suitable for both Vue and React. For those who prefer Vue, vue-stark-boil, developed by the team at [Don't Panic DAO](https://github.com/dontpanicdao), is a great option.
+Starknet 生态系统为 Vue 和 React 提供了合适的框架。对于那些喜欢 Vue 的人来说，由 https://github.com/dontpanicdao[Don't Panic DAO] 团队开发的 vue-stark-boil 是一个很好的选择。
 
-To start, clone the project to your device from [here](https://github.com/dontpanicdao/vue-stark-boil). For a deeper understanding of Vue, visit their [website](https://vuejs.org/). The vue-stark-boil boilerplate enables various functionalities, such as connecting to a wallet, listening for account changes, and calling a contract.
+首先，从 https://github.com/dontpanicdao/vue-stark-boil[此处] 将项目克隆到您的设备上。要深入了解 Vue，请访问他们的 https://vuejs.org/[网站]。vue-stark-boil 模板支持各种功能，如连接到钱包，监听帐户更改和调用合约。
 
-After cloning the project, ensure that you install all dependencies by running the following command in your terminal:
+在克隆项目后，请确保通过在终端运行以下命令安装所有依赖项：
 
 [source, bash]
 ----
 npm install
 ----
 
+
+[NOTE]
+====
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
+
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
+====
 
 == Contributing
 

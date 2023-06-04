@@ -1,31 +1,32 @@
 [id="external"]
 
-= External Functions in Cairo
+= Cairo 中的 External Functions
 
-External functions are functions that can be called by other contracts or externally by users through a transaction on the blockchain. They can change the contract's state, and therefore, require gas fees for execution. This means that we can write to the contract's storage using the `write` function.
+External Functions是可以通过其他合约或用户通过区块链上的交易外部调用的函数。它们可以改变合约的状态，因此，需要执行 gas 费用。这意味着我们可以使用 `write` 函数将数据写入合约的存储。
 
-In Cairo, external functions are defined using the `#[external]` attribute. In Solidity, you would use the `public` or `external` keyword to define a similar type of function. 
+在 Cairo 中，使用 `#[external]` 属性定义 External Functions 。在 Solidity 中，你可以使用 `public` 或 `external` 关键字来定义类似类型的函数。
 
-In the Vote contract, there is only one external function: `vote`. Let's examine it in detail:
+在 Vote 合约中，只有一个 External Functions ：`vote`。让我们详细了解一下：
+
 
 [source,rust]
 ----
-// @dev Submit a vote (0 for No and 1 for Yes)
-// @param vote (u8): vote value, 0 for No and 1 for Yes
-// @return () : updates the storage with the vote count and marks the voter as not allowed to vote again
+// @dev 提交投票（0 表示 No，1 表示 Yes）
+// @param vote (u8): 投票值，0 表示 No，1 表示 Yes
+// @return () : 更新存储中的投票计数，并将投票者标记为不允许再次投票
 #[external]
 fn vote(vote: u8) {
-    // Check if the vote is valid (0 or 1)
+    // 检查投票是否有效（0 或 1）
     assert(vote == 0_u8 | vote == 1_u8, 'VOTE_0_OR_1');
 
-    // Know if a voter has already voted and continue if they have not voted
+    // 知道投票者是否已经投票，如果没有投票则继续
     let caller : ContractAddress = get_caller_address();
     assert_allowed(caller);
 
-    // Mark that the voter has already voted and update in the storage
+    // 标记投票者已经投票，并在存储中更新
     can_vote::write(caller, false);
 
-    // Update the vote count in the storage depending on the vote value (0 or 1)
+    // 根据投票值（0 或 1）更新存储中的投票计数
     if (vote == 0_u8) {
         no_votes::write(no_votes::read() + 1_u8);
     }
@@ -35,14 +36,15 @@ fn vote(vote: u8) {
 }
 ----
 
-The `vote` function is an external function that allows users to submit their vote (0 for No and 1 for Yes) to the contract. It takes a `u8` value as input, checks if the value is valid (0 or 1), and updates the storage accordingly.
+`vote` 函数是一个 External Functions ，允许用户向合约提交投票（0 表示 No，1 表示 Yes）。它接受一个 `u8` 值作为输入，检查该值是否有效（0 或 1），并相应地更新存储。
+
 
 [NOTE]
 ====
-The Book is a community-driven effort created for the community.
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
 
-* If you've learned something, or not, please take a moment to provide feedback through https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[this 3-question survey].
-* If you discover any errors or have additional suggestions, don't hesitate to open an https://github.com/starknet-edu/starknetbook/issues[issue on our GitHub repository].
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
 ====
 
 == Contributing
@@ -53,5 +55,5 @@ ____
 
 StarknetBook is a work in progress, and your passion, expertise, and unique insights can help transform it into something truly exceptional. Don't be afraid to challenge the status quo or break the Book! Together, we can create an invaluable resource that empowers countless others.
 
-Embrace the excitement of contributing to something bigger than ourselves. If you see room for improvement, seize the opportunity! Check out our https://github.com/starknet-edu/starknetbook/blob/main/CONTRIBUTING.adoc[guidelines] and join our vibrant community. Let's fearlessly build Starknet! 
+Embrace the excitement of contributing to something bigger than ourselves. If you see room for improvement, seize the opportunity! Check out our https://github.com/starknet-edu/starknetbook/blob/main/CONTRIBUTING.adoc[guidelines] and join our vibrant community. Let's fearlessly build Starknet!
 ____

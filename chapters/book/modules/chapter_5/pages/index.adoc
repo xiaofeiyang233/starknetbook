@@ -1,20 +1,23 @@
-= Front-End Development
+= 前端开发
 
 ====
-CONTRIBUTE: Your contributions can greatly enhance the depth and practicality of this chapter. We're specifically seeking examples of using starknet-react alongside starknet.js to create straightforward dApps. If you've built something or have insights to share, we encourage you to open a https://github.com/starknet-edu/starknetbook/[PR on our GitHub repository]. Your expertise will help expand our collective knowledge and make blockchain technology more accessible for everyone. Thank you for considering contributing to this open-source project.
+贡献者：您的贡献可以极大地提高本章的深度和实用性。我们特别寻求使用 starknet-react 与 starknet.js 一起创建简单 dApps 的示例。如果您已经构建了一些东西或者有心得体会，我们鼓励您在我们的 https://github.com/starknet-edu/starknetbook/[GitHub 仓库]上提交 PR。您的专业知识将帮助扩展我们的集体知识，并让区块链技术更容易为大家所接受。感谢您考虑为这个开源项目做出贡献。
+
 ====
 
-Several tools exist in the starknet ecosystem to build the front-end for your application. The most popular ones are:
+在 starknet 生态中存在着几种用于构建应用前端的工具。最受欢迎的工具有：
 
-* https://github.com/apibara/starknet-react[starknet-react] (https://apibara.github.io/starknet-react[documentation]): Collection of React hooks for Starknet. It is inspired by https://github.com/tmm/wagmi[wagmi], powered by https://github.com/0xs34n/starknet.js[starknet.js].
-* https://github.com/0xs34n/starknet.js[starknet.js]: A JavaScript library for interacting with Starknet contracts. It would be the equivalent of https://web3js.org/[web3.js] for Ethereum.
+
+* https://github.com/apibara/starknet-react[starknet-react] (https://apibara.github.io/starknet-react[文档]): Starknet 的 React 钩子集合。它受到 https://github.com/tmm/wagmi[wagmi] 的启发， 由 https://github.com/0xs34n/starknet.js[starknet.js] 提供支持。
+* https://github.com/0xs34n/starknet.js[starknet.js]: 一个用于与 Starknet 合约交互的 JavaScript 库。它相当于以太坊的  https://web3js.org/[web3.js]。
+
 
 [NOTE]
 ====
-The Book is a community-driven effort created for the community.
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
 
-* If you've learned something, or not, please take a moment to provide feedback through https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[this 3-question survey].
-* If you discover any errors or have additional suggestions, don't hesitate to open an https://github.com/starknet-edu/starknetbook/issues[issue on our GitHub repository].
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
 ====
 
 == Contributing

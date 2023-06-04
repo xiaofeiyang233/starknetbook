@@ -1,20 +1,20 @@
 [id="traits"]
 
-= Traits and Implementations in Cairo Contracts
+= Cairo 合约中的 trait 和 Implementation
 
-This chapter introduces the basics of using traits and implementations in Cairo contracts, enough to get you started with writing smart contracts in Starknet. If you want to go deeper consider reading the https://cairo-book.github.io/[Cairo Book] which covers the language in detail.
+本章介绍了在 Cairo 合约中使用 trait 和 Implementation 的基础知识，足以让您开始编写 Starknet 的智能合约。如果您想深入了解，请考虑阅读 https://cairo-book.github.io/[Cairo 书籍]，其中详细介绍了该语言
 
-Cairo, heavily inspired by Rust, employs the concepts of traits and implementations to facilitate code modularity and reusability. Understanding the relationship between traits and implementations is key to writing clean, organized, and efficient Cairo code.
+Cairo 受 Rust 的启发，采用 trait 和 Implementation 的概念来促进代码的模块化和可重用性。理解特质和实现之间的关系对编写干净、有组织和高效的 Cairo 代码至关重要。
 
-Traits serve as interface definitions, providing a blueprint for a set of methods that a contract should implement. By defining a trait, you specify a group of related methods without providing any actual implementation. Traits establish a consistent structure for your contracts, allowing multiple implementations to conform to the same method signatures.
+trait 充当接口定义，为合约应实现的一组方法提供蓝图。通过定义 trait ，您可以指定一组相关方法，而无需提供任何实际实现。 trait 为您的合约建立一致的结构，允许多个实现符合相同的方法签名
 
-Implementations provide the actual functionality of traits for specific data structures. By creating an implementation, you define how a given contract or data structure should behave according to the methods outlined in a trait. Multiple implementations can exist for a single trait, catering to different use cases or data structures.
+Implementation 为特定数据结构提供 trait 的实际功能。通过创建 Implementation ，您可以定义给定合约或数据结构根据 trait 中概述的方法应如何表现。一个 trait 可以有多个 Implementation ，以满足不同的用例或数据结构。
 
-We'll continue using our modified voting contract, which has a trait for getting voting results.
+我们将继续使用我们修改过的投票合约，该合约具有用于获取投票结果的 trait 。
 
-== Defining a Trait
+== 定义 trait
 
-To define a trait, you'll use the `trait` keyword followed by the trait name and a block containing function signatures that the implementing contract should define. Let's take a look at the `VotingResultTrait` from our modified voting contract:
+要定义 trait ，您需要使用 `trait` 关键字，后面跟 trait 名称和一个包含实现合约应定义的函数签名的块。让我们看一下我们修改过的投票合约中的 `VotingResultTrait`：
 
 [source, rust]
 ----
@@ -26,13 +26,13 @@ trait VotingResultTrait {
 }
 ----
 
-This trait requires any contract implementing it to provide two functions: `get_voting_result` and `get_voting_result_in_percentage`.
+该 trait 要求任何实现它的合约提供两个函数：`get_voting_result` 和 `get_voting_result_in_percentage`。
 
-== Implementing a Trait
+== 实现 trait
 
-To implement a trait in a contract, you'll use the `impl` keyword followed by the name of the implementing structure (in our case, `VotingResultImpl`), the `of` keyword, and the trait name. Then, you'll define the required functions in a block.
+要在合约中实现 trait ，您需要使用 `impl`关键字，后跟实现结构的名称（在我们的例子中是 `VotingResultImpl`）、`of` 关键字和 trait 名称。然后，您将在一个块中定义所需的函数。
 
-Here's how the `VotingResultImpl` implements the `VotingResultTrait` in our modified voting contract:
+以下是我们修改过的投票合约中 `VotingResultImpl` 如何实现 `VotingResultTrait`：
 
 [source, rust]
 ----
@@ -67,11 +67,11 @@ impl VotingResultImpl of VotingResultTrait {
 }
 ----
 
-The `VotingResultImpl` structure implements the `VotingResultTrait` by providing the `get_voting_result` and `get_voting_result_in_percentage` functions as required by the trait.
+`VotingResultImpl` 结构通过提供 trait 所需的 `get_voting_result` 和 `get_voting_result_in_percentage` 函数来实现 `VotingResultTrait`。
 
-== Using Trait Functions
+== 使用 trait 函数
 
-To call a trait function, you'll use the trait name followed by the function name. In our modified voting contract, we call the trait functions in the `get_vote_results` view function:
+要调用 trait 函数，您需要使用 trait 名称后跟函数名称。在我们修改过的投票合约中，我们在 `get_vote_results` 视图函数中调用了 trait 函数：
 
 [source, rust]
 ----
@@ -82,17 +82,16 @@ fn get_vote_results() -> (u8, u8, u8, u8) {
     return (n_yes, n_no, yes_percentage, no_percentage);
 }
 ----
+在 `get_vote_results` 函数中，我们使用 `VotingResultTrait` 名称调用 `get_voting_result` 和 `get_voting_result_in_percentage` 方法。
 
-In the `get_vote_results` function, we call the `get_voting_result` and `get_voting_result_in_percentage` methods using the `VotingResultTrait` name.
-
-That's it! You've now learned the basics of using traits in Cairo contracts. To recap, traits provide a way to define a set of methods that a contract should implement, helping to enforce a consistent structure and modular code. In our modified voting contract, we used a trait to define methods for getting voting results, implemented the trait in a separate structure, and called the trait functions in the main contract.
+就是这样！您现在已经了解了在 Cairo 合约中使用 trait 的基本知识。总结一下， trait 提供了一种定义合约应实现的一组方法的方法，有助于实现一致的结构和模块化代码。在我们修改后的投票合约中，我们使用 trait 来定义获取投票结果的方法，将 trait 实现在单独的结构中，并在主合约中调用特征函数。
 
 [NOTE]
 ====
-The Book is a community-driven effort created for the community.
+《Starknet 之书》是 Starknet 社区成员合力之作，便于社区成员学习之用。
 
-* If you've learned something, or not, please take a moment to provide feedback through https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[this 3-question survey].
-* If you discover any errors or have additional suggestions, don't hesitate to open an https://github.com/starknet-edu/starknetbook/issues[issue on our GitHub repository].
+* 无论你是否有所收获，烦请填写此问卷， https://a.sprig.com/WTRtdlh2VUlja09lfnNpZDo4MTQyYTlmMy03NzdkLTQ0NDEtOTBiZC01ZjAyNDU0ZDgxMzU=[简单回答三个问题] ，给予我们反馈。
+* 若发现任何错误，或有其他建议，请在我们的 https://github.com/starknet-edu/starknetbook/issues[Github 仓库]发起问题单 (Issues)。
 ====
 
 == Contributing
